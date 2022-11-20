@@ -1,0 +1,46 @@
+/** @format */
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background: url("./assets/images/background.jpg") top center no-repeat;
+  background-size: cover;
+  padding: 20px 10px;
+}
+h1 {
+  float: left;
+  font-size: 38px;
+  text-transform: uppercase;
+  line-height: 38px;
+  font-weight: bold;
+  padding: 10px 0;
+}
+h1 span {
+  font-weight: normal;
+  font-size: 30px;
+  letter-spacing: 3px;
+}
+
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 24px;
+  margin-top: 20px;
+}
+footer {
+  font-family: "Courier New", Courier, monospace;
+  color: #333;
+  text-align: center;
+}
+.container {
+  max-width: 1000px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(15px);
+  border-radius: 4px;
+}
+.full-width {
+  display: block;
+  width: 100%;
+  margin: 7px 0;
+}

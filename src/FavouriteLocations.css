@@ -1,0 +1,18 @@
+.FavouriteLocations .fav-locations {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.FavouriteLocations .location {
+  display: inline-block;
+  padding-right: 20px;
+}
+.FavouriteLocations .location a {
+  cursor: pointer;
+  color: #333;
+  text-decoration: none;
+}
+.FavouriteLocations .location a:hover {
+  color: #000;
+  text-decoration: underline;
+}

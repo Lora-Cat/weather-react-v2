@@ -1,0 +1,9 @@
+.TopLocations .top-locations li a {
+  color: #009;
+  text-decoration: none;
+  cursor: pointer;
+}
+.TopLocations .top-locations li a:hover {
+  color: #c00;
+  text-decoration: underline;
+}
