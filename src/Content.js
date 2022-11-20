@@ -1,10 +1,13 @@
+/** @format */
+
 import React, { useState } from "react";
 import axios from "axios";
 import "./styles.css";
 import "./Content.css";
 
 export default function Content() {
-  let apiKey = "91e4be9d3f0ce62462b88df7804804ae";
+  //let apiKey = "91e4be9d3f0ce62462b88df7804804ae";
+  let apiKey = "2d96d64425dca1d6eda00d942a281c0d";
   let [city, setCity] = useState("New York");
   let [cityName, setCityName] = useState("New York");
   function updateCity(e) {
@@ -19,7 +22,7 @@ export default function Content() {
     temperature: "24",
     wind: "6",
     humidity: "55",
-    description: "Clear Sky"
+    description: "Clear Sky",
   };
 
   function updateSearch(e) {
@@ -33,7 +36,7 @@ export default function Content() {
     state: "The United States of America",
     dayOfWeek: "Friday",
     month: "August",
-    date: "19"
+    date: "19",
   };
   return (
     <div className="Content">
