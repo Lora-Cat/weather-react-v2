@@ -2,14 +2,15 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import TopContent from "./TopContent";
 import "./styles.css";
 import "./Content.css";
 
 export default function Content() {
   //let apiKey = "91e4be9d3f0ce62462b88df7804804ae";
   let apiKey = "2d96d64425dca1d6eda00d942a281c0d";
+  let apiAstronomy = "b99861f9264143c2bd4a20afe37f2ab0";
   let [city, setCity] = useState("New York");
-  //let [cityName, setCityName] = useState("New York");
   function updateCity(e) {
     setCity(e.target.value);
   }
@@ -22,6 +23,7 @@ export default function Content() {
       wind: response.data.wind.speed,
       humidity: response.data.main.humidity,
       description: response.data.weather[0].description,
+      data: new Date(response.data.dt * 1000),
     });
   }
 
@@ -30,13 +32,6 @@ export default function Content() {
     let urlCity = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     axios.get(urlCity).then(showTemperature);
   }
-  let cityData = {
-    city: "NEW YORK",
-    state: "The United States of America",
-    dayOfWeek: "Friday",
-    month: "August",
-    date: "19",
-  };
   let container = (
     <div className="row SearchModule">
       <div className="col-12 col-md-8">
@@ -71,25 +66,8 @@ export default function Content() {
   if (weatherData.ready) {
     return (
       <div className="Content">
-        ${container}
-        <div className="row weather">
-          <div className="col-12 col-md-6">
-            <div className="cityName">{weatherData.cityName}</div>
-            <div className="stateName">{cityData.state}</div>
-          </div>
-          <div className="col-6 col-md-3">
-            <div className="time">
-              12<span id="blink">:</span>32
-            </div>
-          </div>
-          <div className="col-6 col-md-3">
-            <div className="currentDate">
-              {cityData.dayOfWeek}
-              <br />
-              {cityData.month} {cityData.date}
-            </div>
-          </div>
-        </div>
+        {container}
+        <TopContent cityName={weatherData.cityName} data={weatherData.data} />
         <div className="row Forecast">
           <div className="col-12 col-md-2 currentWeather weather">
             <div>
