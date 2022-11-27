@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import TopContent from "./TopContent";
+import WeatherIcon from "./WeatherIcon";
 import "./styles.css";
 import "./Content.css";
 
@@ -26,6 +27,7 @@ export default function Content(props) {
       description: response.data.weather[0].description,
       data: new Date(response.data.dt * 1000),
       countryName: response.data.sys.country,
+      icon: response.data.weather[0].icon,
     });
     let urlAstronomy = `https://api.ipgeolocation.io/astronomy?apiKey=${apiAstronomy}&lat=${response.data.coord.lat}&long=${response.data.coord.lon}`;
     axios.get(urlAstronomy).then(updateAstronomy);
@@ -89,11 +91,7 @@ export default function Content(props) {
           <div className="col-12 col-md-2 currentWeather weather">
             <div>
               <div id="iconCurrentWeather">
-                <div className="icon sunny">
-                  <div className="sun">
-                    <div className="rays"></div>
-                  </div>
-                </div>
+                <WeatherIcon code={weatherData.icon} />
               </div>
               <span className="temperature current" id="currentTemperature">
                 {weatherData.temperature}°C

@@ -44,3 +44,7 @@ footer {
   width: 100%;
   margin: 7px 0;
 }
+.currentWeather .icon {
+  font-size: 0.9em;
+  margin: 4px auto;
+}
