@@ -13,6 +13,8 @@ export default function Content(props) {
   let apiAstronomy = "b99861f9264143c2bd4a20afe37f2ab0";
   let [city, setCity] = useState(props.defaultCity);
   let [astronomy, setAstronomy] = useState({});
+  let [unit, setUnit] = useState("celsius");
+  let [temperature, setTemperature] = useState({ number: "0", unit: "°C" });
   function updateCity(e) {
     setCity(e.target.value);
   }
@@ -28,6 +30,10 @@ export default function Content(props) {
       data: new Date(response.data.dt * 1000),
       countryName: response.data.sys.country,
       icon: response.data.weather[0].icon,
+    });
+    setTemperature({
+      number: Math.round(response.data.main.temp),
+      unit: "°C",
     });
     let urlAstronomy = `https://api.ipgeolocation.io/astronomy?apiKey=${apiAstronomy}&lat=${response.data.coord.lat}&long=${response.data.coord.lon}`;
     axios.get(urlAstronomy).then(updateAstronomy);
@@ -50,6 +56,52 @@ export default function Content(props) {
   function updateSearch(e) {
     e.preventDefault();
     search();
+  }
+  function toFahrenheit(e) {
+    e.preventDefault();
+    setUnit("fahrenheit");
+    setTemperature({
+      number: Math.round((weatherData.temperature * 9) / 5 + 32),
+      unit: "°F",
+    });
+  }
+  function toCelsius(e) {
+    e.preventDefault();
+    setUnit("celsius");
+    setTemperature({
+      number: weatherData.temperature,
+      unit: "°C",
+    });
+  }
+
+  function convertTemperature() {
+    if (unit === "celsius") {
+      return (
+        <div className="btn-group mx-auto mt-1">
+          <button className="btn btn-success" disabled id="celsius">
+            °C
+          </button>
+          <button
+            className="btn btn-success"
+            id="fahrenheit"
+            onClick={toFahrenheit}
+          >
+            °F
+          </button>
+        </div>
+      );
+    } else {
+      return (
+        <div className="btn-group mx-auto mt-1">
+          <button className="btn btn-success" id="celsius" onClick={toCelsius}>
+            °C
+          </button>
+          <button className="btn btn-success" disabled id="fahrenheit">
+            °F
+          </button>
+        </div>
+      );
+    }
   }
   let container = (
     <div className="row SearchModule">
@@ -94,7 +146,8 @@ export default function Content(props) {
                 <WeatherIcon code={weatherData.icon} />
               </div>
               <span className="temperature current" id="currentTemperature">
-                {weatherData.temperature}°C
+                {temperature.number}
+                {temperature.unit}
               </span>
             </div>
             {weatherData.description}
@@ -104,98 +157,71 @@ export default function Content(props) {
             Humidity: <span id="currentHumidity">{weatherData.humidity}</span>
             %
             <br />
-            <div className="btn-group mx-auto mt-1">
-              <button className="btn btn-success" disabled id="celsius">
-                °C
-              </button>
-              <button className="btn btn-success" id="fahrenheit">
-                °F
-              </button>
-            </div>
+            {convertTemperature()}
           </div>
           <div className="col-12 col-md-2 nextDate weather">
             <div className="dayPlus1"></div>
-            <div className="icon sun-cloudy">
-              <div className="cloud"></div>
-              <div className="sun">
-                <div className="rays"></div>
-              </div>
-            </div>
-            max <span className="temperature">25°C</span>
+            <WeatherIcon code="02d" />
+            max <span className="temperature">25{temperature.unit}</span>
             <br />
-            min <span className="temperature">17°C</span>
+            min <span className="temperature">17{temperature.unit}</span>
             <br />
             <div className="realFeel">
               RealFeel
               <br />
-              <span className="temperature">23°C</span>
+              <span className="temperature">23{temperature.unit}</span>
             </div>
           </div>
           <div className="col-12 col-md-2 nextDate weather">
             <div className="dayPlus2"></div>
-            <div className="icon sunny">
-              <div className="sun">
-                <div className="rays"></div>
-              </div>
-            </div>
-            max <span className="temperature">27°C</span>
+            <WeatherIcon code="01d" />
+            max <span className="temperature">27{temperature.unit}</span>
             <br />
-            min <span className="temperature">22°C</span>
+            min <span className="temperature">22{temperature.unit}</span>
             <br />
             <div className="realFeel">
               RealFeel
               <br />
-              <span className="temperature">25°C</span>
+              <span className="temperature">25{temperature.unit}</span>
             </div>
           </div>
           <div className="col-12 col-md-2 nextDate weather">
             <div className="dayPlus3"></div>
-            <div className="icon cloudy">
-              <div className="cloud"></div>
-              <div className="cloud"></div>
-            </div>
-            max <span className="temperature">29°C</span>
+            <WeatherIcon code="04d" />
+            max <span className="temperature">29{temperature.unit}</span>
             <br />
-            min <span className="temperature">23°C</span>
+            min <span className="temperature">23{temperature.unit}</span>
             <br />
             <div className="realFeel">
               RealFeel
               <br />
-              <span className="temperature">26°C</span>
+              <span className="temperature">26{temperature.unit}</span>
             </div>
           </div>
           <div className="col-12 col-md-2 nextDate weather">
             <div className="dayPlus4"></div>
-            <div className="icon sun-cloudy">
-              <div className="cloud"></div>
-              <div className="sun">
-                <div className="rays"></div>
-              </div>
-            </div>
-            max <span className="temperature">22°C</span>
+            <WeatherIcon code="09d" />
+            max <span className="temperature">22{temperature.unit}</span>
             <br />
-            min <span className="temperature">15°C</span>
+            min <span className="temperature">15{temperature.unit}</span>
             <br />
             <div className="realFeel">
               RealFeel
               <br />
-              <span className="temperature">19°C</span>
+              <span className="temperature">19{temperature.unit}</span>
             </div>
           </div>
           <div className="col-12 col-md-2 nextDate weather">
             <div className="dayPlus5"></div>
-            <div className="icon rainy">
-              <div className="cloud"></div>
-              <div className="rain"></div>
-            </div>
-            max <span className="temperature">19°C</span>
+            <WeatherIcon code="13d" />
+            max <span className="temperature">19{temperature.unit}</span>
             <br />
-            min <span className="temperature">14°C</span>
+            min <span className="temperature">14{temperature.unit}</span>
             <br />
             <div className="realFeel">
               RealFeel
               <br />
-              <span className="temperature">17°C</span>
+              <span className="temperature">17{temperature.unit}</span>
             </div>
           </div>
         </div>

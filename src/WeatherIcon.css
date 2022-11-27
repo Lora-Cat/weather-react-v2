@@ -9,11 +9,6 @@
   margin: 15px auto;
 }
 
-.WeatherIcon .currentWeather .icon {
-  font-size: 0.9em;
-  margin: 4px auto;
-}
-
 .WeatherIcon #weatherDescription {
   text-transform: capitalize;
 }
