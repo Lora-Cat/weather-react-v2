@@ -6,11 +6,12 @@ import TopContent from "./TopContent";
 import "./styles.css";
 import "./Content.css";
 
-export default function Content() {
+export default function Content(props) {
   //let apiKey = "91e4be9d3f0ce62462b88df7804804ae";
   let apiKey = "2d96d64425dca1d6eda00d942a281c0d";
   let apiAstronomy = "b99861f9264143c2bd4a20afe37f2ab0";
-  let [city, setCity] = useState("New York");
+  let [city, setCity] = useState(props.defaultCity);
+  let [astronomy, setAstronomy] = useState({});
   function updateCity(e) {
     setCity(e.target.value);
   }
@@ -24,13 +25,29 @@ export default function Content() {
       humidity: response.data.main.humidity,
       description: response.data.weather[0].description,
       data: new Date(response.data.dt * 1000),
+      countryName: response.data.sys.country,
     });
+    let urlAstronomy = `https://api.ipgeolocation.io/astronomy?apiKey=${apiAstronomy}&lat=${response.data.coord.lat}&long=${response.data.coord.lon}`;
+    axios.get(urlAstronomy).then(updateAstronomy);
+  }
+
+  function updateAstronomy(response) {
+    setAstronomy({
+      sunrise: response.data.sunrise,
+      sunset: response.data.sunset,
+      moonrise: response.data.moonrise,
+      moonset: response.data.moonset,
+    });
+  }
+
+  function search() {
+    let urlCity = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    axios.get(urlCity).then(showTemperature);
   }
 
   function updateSearch(e) {
     e.preventDefault();
-    let urlCity = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(urlCity).then(showTemperature);
+    search();
   }
   let container = (
     <div className="row SearchModule">
@@ -67,7 +84,7 @@ export default function Content() {
     return (
       <div className="Content">
         {container}
-        <TopContent cityName={weatherData.cityName} data={weatherData.data} />
+        <TopContent weatherData={weatherData} />
         <div className="row Forecast">
           <div className="col-12 col-md-2 currentWeather weather">
             <div>
@@ -188,23 +205,23 @@ export default function Content() {
           <div className="col-12 col-md-3 info">
             Sunrise:{" "}
             <span>
-              <span id="sunrise">6:05</span>
+              <span id="sunrise">{astronomy.sunrise}</span>
             </span>
             <br />
             Sunset:{" "}
             <span>
-              <span id="sunset">7:55</span>
+              <span id="sunset">{astronomy.sunset}</span>
             </span>
           </div>
           <div className="col-12 col-md-3 info">
             Moonrise:{" "}
             <span>
-              <span id="moonrise">9:46</span>
+              <span id="moonrise">{astronomy.moonrise}</span>
             </span>
             <br />
             Moonset:{" "}
             <span>
-              <span id="moonset">8:54</span>
+              <span id="moonset">{astronomy.moonset}</span>
             </span>
           </div>
           <div className="col-12 col-md-6 info">
@@ -218,6 +235,7 @@ export default function Content() {
       </div>
     );
   } else {
+    search();
     return container;
   }
 }

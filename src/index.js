@@ -19,7 +19,7 @@ root.render(
     <div className="container">
       <Header />
       <FavouriteLocations />
-      <Content />
+      <Content defaultCity="New York" />
       <TopLocations />
       <Footer />
     </div>
