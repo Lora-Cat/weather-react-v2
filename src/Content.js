@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import TopContent from "./TopContent";
 import WeatherIcon from "./WeatherIcon";
+import DailyWeather from "./DailyWeather";
+
 import "./styles.css";
 import "./Content.css";
 
@@ -19,6 +21,8 @@ export default function Content(props) {
     setCity(e.target.value);
   }
   let [weatherData, setWeatherData] = useState({ ready: false });
+  let [forecastData, setForecastData] = useState({ ready: false });
+
   function showTemperature(response) {
     setWeatherData({
       ready: true,
@@ -37,6 +41,14 @@ export default function Content(props) {
     });
     let urlAstronomy = `https://api.ipgeolocation.io/astronomy?apiKey=${apiAstronomy}&lat=${response.data.coord.lat}&long=${response.data.coord.lon}`;
     axios.get(urlAstronomy).then(updateAstronomy);
+    let urlDailyForecast = `https://api.openweathermap.org/data/2.5/onecall?lat=${response.data.coord.lat}&lon=${response.data.coord.lon}&units=metric&appid=${apiKey}`;
+    axios.get(urlDailyForecast).then(updateForecast);
+  }
+  function updateForecast(response) {
+    setForecastData({
+      ready: true,
+      daily: response.data.daily,
+    });
   }
 
   function updateAstronomy(response) {
@@ -134,7 +146,7 @@ export default function Content(props) {
     </div>
   );
 
-  if (weatherData.ready) {
+  if (weatherData.ready && forecastData.ready) {
     return (
       <div className="Content">
         {container}
@@ -159,71 +171,19 @@ export default function Content(props) {
             <br />
             {convertTemperature()}
           </div>
-          <div className="col-12 col-md-2 nextDate weather">
-            <div className="dayPlus1"></div>
-            <WeatherIcon code="02d" />
-            max <span className="temperature">25{temperature.unit}</span>
-            <br />
-            min <span className="temperature">17{temperature.unit}</span>
-            <br />
-            <div className="realFeel">
-              RealFeel
-              <br />
-              <span className="temperature">23{temperature.unit}</span>
-            </div>
-          </div>
-          <div className="col-12 col-md-2 nextDate weather">
-            <div className="dayPlus2"></div>
-            <WeatherIcon code="01d" />
-            max <span className="temperature">27{temperature.unit}</span>
-            <br />
-            min <span className="temperature">22{temperature.unit}</span>
-            <br />
-            <div className="realFeel">
-              RealFeel
-              <br />
-              <span className="temperature">25{temperature.unit}</span>
-            </div>
-          </div>
-          <div className="col-12 col-md-2 nextDate weather">
-            <div className="dayPlus3"></div>
-            <WeatherIcon code="04d" />
-            max <span className="temperature">29{temperature.unit}</span>
-            <br />
-            min <span className="temperature">23{temperature.unit}</span>
-            <br />
-            <div className="realFeel">
-              RealFeel
-              <br />
-              <span className="temperature">26{temperature.unit}</span>
-            </div>
-          </div>
-          <div className="col-12 col-md-2 nextDate weather">
-            <div className="dayPlus4"></div>
-            <WeatherIcon code="09d" />
-            max <span className="temperature">22{temperature.unit}</span>
-            <br />
-            min <span className="temperature">15{temperature.unit}</span>
-            <br />
-            <div className="realFeel">
-              RealFeel
-              <br />
-              <span className="temperature">19{temperature.unit}</span>
-            </div>
-          </div>
-          <div className="col-12 col-md-2 nextDate weather">
-            <div className="dayPlus5"></div>
-            <WeatherIcon code="13d" />
-            max <span className="temperature">19{temperature.unit}</span>
-            <br />
-            min <span className="temperature">14{temperature.unit}</span>
-            <br />
-            <div className="realFeel">
-              RealFeel
-              <br />
-              <span className="temperature">17{temperature.unit}</span>
-            </div>
-          </div>
+          {forecastData.daily.map((daily, index) => {
+            if (index > 0 && index < 6) {
+              return (
+                <DailyWeather
+                  data={daily}
+                  unit={temperature.unit}
+                  key={index}
+                />
+              );
+            } else {
+              return null;
+            }
+          })}
         </div>
         <div className="row weather">
           <div className="col-12 col-md-3 info">
