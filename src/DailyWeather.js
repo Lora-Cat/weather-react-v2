@@ -1,23 +1,30 @@
 /** @format */
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import WeatherIcon from "./WeatherIcon";
 
 export default function DailyWeather(props) {
-  function maxTemperature() {
-    let temperature = Math.round(props.data.temp.max);
-    return temperature;
-  }
+  let [temperature, setTemperature] = useState({
+    min: Math.round(props.data.temp.min),
+    max: Math.round(props.data.temp.max),
+    real: Math.round(props.data.feels_like.day),
+  });
 
-  function minTemperature() {
-    let temperature = Math.round(props.data.temp.min);
-    return temperature;
-  }
-
-  function realTemperature() {
-    let temperature = Math.round(props.data.feels_like.day);
-    return temperature;
-  }
+  useEffect(() => {
+    if (props.unit === "°C") {
+      setTemperature({
+        min: Math.round(props.data.temp.min),
+        max: Math.round(props.data.temp.max),
+        real: Math.round(props.data.feels_like.day),
+      });
+    } else {
+      setTemperature({
+        min: Math.round((props.data.temp.min * 9) / 5 + 32),
+        max: Math.round((props.data.temp.max * 9) / 5 + 32),
+        real: Math.round((props.data.feels_like.day * 9) / 5 + 32),
+      });
+    }
+  }, [props]);
 
   function day() {
     let date = new Date(props.data.dt * 1000);
@@ -60,13 +67,13 @@ export default function DailyWeather(props) {
       <WeatherIcon code={props.data.weather[0].icon} />
       max{" "}
       <span className="temperature">
-        {maxTemperature()}
+        {temperature.max}
         {props.unit}
       </span>
       <br />
       min{" "}
       <span className="temperature">
-        {minTemperature()}
+        {temperature.min}
         {props.unit}
       </span>
       <br />
@@ -74,7 +81,7 @@ export default function DailyWeather(props) {
         RealFeel
         <br />
         <span className="temperature">
-          {realTemperature()}
+          {temperature.real}
           {props.unit}
         </span>
       </div>
